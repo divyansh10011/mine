@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Sister 🎂</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(180deg,#ffe6f0,#fff);
+  text-align:center;
+  color:#4b004f;
+  overflow-x:hidden;
+  max-width:430px;
+  margin:auto;
+}
+.hidden{display:none}
+section{padding:32px 16px}
+h1{font-family:'Dancing Script',cursive;font-size:2.8em;color:#d63384}
+button{
+  background:#ff6b9d;border:none;color:#fff;
+  padding:14px 26px;border-radius:30px;
+  font-size:1em;cursor:pointer;margin:12px;
+}
+button:active{transform:scale(.9);box-shadow:0 0 25px rgba(255,107,157,.8)}
+.intro{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.card{
+  background:#fff;border-radius:16px;padding:24px;
+  max-width:340px;margin:20px auto;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.photos{
+  display:none;gap:16px;padding:20px;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+}
+.photos.show{display:flex}
+.photos img{
+  min-width:220px;border-radius:18px;
+  scroll-snap-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+.memory-text{
+  display:none;background:#fff;margin:26px auto;
+  padding:22px;border-radius:18px;
+  max-width:360px;font-family:'Dancing Script',cursive;
+  font-size:1.25em;
+}
+.video-box{display:none;margin-top:28px}
+video{width:100%;max-width:360px;border-radius:18px}
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:flex;justify-content:center;align-items:center;
+  opacity:0;pointer-events:none;transition:.3s;z-index:9999;
+}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-content{background:#fff;width:90%;max-width:360px;padding:16px;border-radius:18px}
+.letter-pop{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:#fffdf8;padding:26px;width:90%;
+  max-width:360px;border-radius:18px;
+  font-family:'Dancing Script',cursive;font-size:1.25em;
+  opacity:0;z-index:9999;
+}
+.letter-pop.show{animation:pop .6s cubic-bezier(.22,1.4,.36,1) forwards}
+@keyframes pop{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.confetti{
+  position:fixed;width:9px;height:9px;border-radius:50%;
+  animation:fall 4s linear forwards;
+}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.balloon{
+  position:fixed;bottom:-120px;width:52px;height:68px;
+  border-radius:50% 50% 45% 45%;
+  animation:floatUp linear forwards;
+}
+@keyframes floatUp{to{transform:translateY(-140vh) rotate(360deg);opacity:0}}
+.bg-orb{
+  position:fixed;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(255,182,193,.45),transparent 70%);
+  border-radius:50%;filter:blur(40px);
+  animation:floatOrb 18s linear infinite;z-index:-1;
+}
+.bg-orb:nth-child(1){top:10%;left:-20%}
+.bg-orb:nth-child(2){bottom:15%;right:-25%;animation-duration:22s}
+@keyframes floatOrb{50%{transform:translate(60px,-40px)}}
+.slide-in{animation:slideIn .7s ease forwards}
+@keyframes slideIn{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.letter-pop{
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+.letter-overlay-btn{
+  background:rgba(255,107,157,.9);width:100%;padding:16px;
+  border-radius:12px;font-size:1.1em;color:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-orb"></div>
+<div class="bg-orb"></div>
+
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <img id="modalImg">
+    <p id="modalCaption"></p>
+  </div>
+</div>
+
+<section class="intro" id="intro">
+  <h1>Happy Birthday 🎂</h1>
+  <h2> MOTII </h2>
+  <button id="startBtn">Tap to Begin ✨</button>
+</section>
+
+<section class="hidden" id="message">
+  <div class="card letter-card">
+    <button class="letter-overlay-btn" id="letterBtn">
+      💌 Tap to read your letter
+    </button>
+  </div>
+</section>
+<div class="letter-pop" id="letterPop"></div>
+
+<section class="hidden" id="gallery">
+  <h2>✨ Special Sections</h2>
+
+  <button id="girlBtn">💖 Reveal Memories</button>
+  <div class="photos" id="girl">
+    <img src="girl1.jpg" data-id="1">
+    <img src="girl2.jpg" data-id="2">
+    <img src="girl3.jpg" data-id="3">
+  </div>
+
+  <button id="memBtn" class="hidden">📸 Reveal Birthday girl</button>
+  <div class="photos" id="memories">
+    <img src="photo1.jpg" data-id="4">
+    <img src="photo2.jpg" data-id="5">
+    <img src="photo3.jpg" data-id="6">
+  </div>
+
+  <div class="memory-text" id="memoryText">
+    Every photo is a piece of my heart 💕  
+    Laughter, tears, love — all frozen forever.
+  </div>
+
+  <button id="videoBtn" class="hidden">🎬 Reveal Video</button>
+  <div class="video-box" id="videoBox">
+    <video controls>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<script>
+let balloonSpeed=120, balloonIntensity=8;
+
+const photos={
+  1:{caption:"Our memories 💖"},
+  2:{caption:"That smile 😆"},
+  3:{caption:"Forever special 🌸"},
+  4:{caption:"The birthday girl 💕"},
+  5:{caption:"Pure elegance ✨"},
+  6:{caption:"Always shining 🌸"}
+};
+
+startBtn.onclick=()=>{
+  music.volume=.5;
+  music.play().catch(()=>{});
+  intro.remove();
+  message.classList.remove("hidden");
+  gallery.classList.remove("hidden");
+  confetti(120);
+  balloons();
+};
+
+letterBtn.onclick=()=>{
+  letterPop.innerText="";
+  letterPop.classList.add("show");
+  autoType(`Happy Birthday, Motii ! 🎂😜
+Congrats on being one year older but still smaller than me ! 😎
+
+Keep being cute, annoying, and stealing my stuff like a pro
+
+May your cake be huge and your attitude even bigger 😂
+
+Stay naughty, stay crazy — your favorite sibling always has your back 💖`);
+};
+
+girlBtn.onclick=()=>{
+  girl.classList.add("show","slide-in");
+  girlBtn.remove();
+  memBtn.classList.remove("hidden");
+  confetti(80);
+};
+
+memBtn.onclick=()=>{
+  memories.classList.add("show","slide-in");
+  memoryText.style.display="block";
+  memoryText.classList.add("slide-in");
+  memBtn.remove();
+  videoBtn.classList.remove("hidden");
+  confetti(100);
+};
+
+videoBtn.onclick=()=>{
+  videoBox.style.display="block";
+  videoBox.classList.add("slide-in");
+  videoBtn.remove();
+  confetti(200);
+};
+
+document.body.addEventListener("click",e=>{
+  if(!e.target.dataset.id) return;
+  modalImg.src=e.target.src;
+  modalCaption.innerText=photos[e.target.dataset.id].caption;
+  modal.classList.add("open");
+});
+modal.onclick=()=>modal.classList.remove("open");
+
+function confetti(n){
+  const c=["#ffb6c1","#ffd6e8","#ff99c8"];
+  for(let i=0;i<n;i++){
+    const d=document.createElement("div");
+    d.className="confetti";
+    d.style.left=Math.random()*100+"vw";
+    d.style.background=c[Math.floor(Math.random()*c.length)];
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),4000);
+  }
+}
+
+function balloons(){
+  setInterval(()=>{
+    for(let i=0;i<balloonIntensity;i++){
+      const b=document.createElement("div");
+      b.className="balloon";
+      b.style.left=Math.random()*100+"vw";
+      b.style.background=["#ff6b9d","#ffd6e8","#ffb6c1"][Math.floor(Math.random()*3)];
+      b.style.animationDuration=2.5+Math.random()*2+"s";
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),8000);
+    }
+  },balloonSpeed);
+}
+
+function autoType(text){
+  let i=0;
+  const t=setInterval(()=>{
+    letterPop.innerText+=text.charAt(i);
+    i++;
+    if(i>=text.length) clearInterval(t);
+  },40);
+}
+/* CLOSE LETTER WHEN CLICKING ANYWHERE OUTSIDE */
+document.addEventListener("click", (e) => {
+  const letter = document.getElementById("letterPop");
+  const letterBtn = document.getElementById("letterBtn");
+
+  // If letter is open
+  if (letter.classList.contains("show")) {
+    // Ignore clicks on the letter itself or the open button
+    if (!letter.contains(e.target) && e.target !== letterBtn) {
+      letter.classList.remove("show");
+      letter.innerText = ""; // reset text for next open
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>
